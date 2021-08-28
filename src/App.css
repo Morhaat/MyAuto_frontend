@@ -1,0 +1,101 @@
+#App {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#topo {
+    display:inline-block;
+    width: 100%;
+    margin-top: 5px;
+}
+
+#topo #barLogo {
+    float: left;  
+    width: 60%;  
+    position: absolute;
+}
+
+#topo #menu {
+    float: right;
+    width: 40%;
+}
+
+#barHide {
+    float: right;
+    display: none;
+}
+
+@media (max-width: 1210px) {
+    #topo #barLogo {
+        float: left;  
+        width: 50%;    
+    }
+    #topo #menu {
+        float: right;
+        width: 50%;  
+    }
+}
+
+
+@media (max-width: 955px) {
+    #topo #barLogo {
+        float: left;  
+        width: 40%;    
+    }
+    #topo #menu {
+        float: right;
+        width: 60%;  
+    }
+}
+
+@media (max-width : 810px) {
+    #topo #menu {
+        display: none;
+    }
+
+    #topo #barHide { 
+        display: block;
+    }
+}
+
+
+#topo #menu li{
+    display: inline-block;
+    align-items: center;
+    padding: 10px 10px;
+}
+
+#topo #menu li a {
+    text-align: center;
+    padding: 10px 10px;
+    font-size: 20px;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+#topo #menu li a:hover{
+    background-color: rgb(144, 130, 175);
+    border-radius: 5px;
+}
+
+#imgCapa{
+    width: 100%;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+#rightBarOn {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+Footer{
+    width: 100%;
+    height: 40px;
+}
