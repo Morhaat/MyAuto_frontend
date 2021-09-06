@@ -11,7 +11,7 @@ const PHeader = ()=>{
         <header id='topo'>
             <div id='barLogo'>
                 <Link to='/'>
-                    <img src= {imagemLogo} alt='' id='imgLogo' />
+                    <img src= {imagemLogo} alt='Logotipo site MyAuto' id='imgLogo' />
                 </Link>
             </div>
             <ul id='menu'>

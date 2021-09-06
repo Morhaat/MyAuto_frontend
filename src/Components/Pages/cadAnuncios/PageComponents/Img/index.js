@@ -12,8 +12,8 @@ const Img = (props) => {
     const filho = props.children;
 
     useEffect(()=>{
-        if (props.file.Url !== undefined){
-            const urlFile = URL.createObjectURL(props.file.File);
+        if (props.file.dados !== undefined){
+            const urlFile = props.file.file;
             setFileURL(urlFile);
             setStImage(true);
         }
@@ -25,16 +25,15 @@ const Img = (props) => {
         setFileURL(null);
         setStImage(false);
         props.setaImg({
-            Url: undefined,
-            File:{},
-            Passei:'Passou'
+            dados: undefined,
+            file:"",
         })
     }
 
     return(
         <Div id="blocoImg" image={stImage}>
             <div id="divImg">
-                <img id="imgPrincipal"src={fileURL} alt=""/>
+                <img id="imgPrincipal"src={fileURL} alt="Imagem do veículo anunciado"/>
                 <img id="imgBt" onClick={handleClick} src={btFecha} alt="botão para excluir imagens selecionadas"/>
             </div>
             {filho}

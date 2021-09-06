@@ -6,6 +6,7 @@ import Veiculos from '../Pages/Veiculos';
 import Contato from '../Pages/Contato';
 import Sobre from '../Pages/Sobre';
 import CadVeiculos from '../Pages/cadAnuncios';
+import Usuario from '../Pages/Usuarios';
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -23,6 +24,10 @@ export default () => {
 
             <Route exact path='/cadAnuncios'>
                 <CadVeiculos/>            
+            </Route>
+
+            <Route exact path='/:id' component={<Usuario/>}>
+                <Usuario/>           
             </Route>
 
             <Route exact path='/Contato'>

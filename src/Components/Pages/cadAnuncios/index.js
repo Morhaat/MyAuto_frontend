@@ -5,12 +5,15 @@ import Div from './styled';
 import api from '../../../Services/api';
 import Img from './PageComponents/Img';
 import FrameLoad from './PageComponents/FrameLoad';
+import {Link} from 'react-router-dom';
 
 
 const CadVeiculos = ()=>{  
 
 
-    const [idUsuario, setIdUsuario] = useState('Dboma5636');
+    const [idUsuario, setIdUsuario] = useState('56361901');
+    const [usuario, setUsuario] = useState('Morhaat');
+    const [maxSize, setMaxSize] = useState(52428800);
     //Estados dos Selects...............................................................................................
     const [selecaoMarca, setMarca] = useState([]);
     const [selecaoModelo, setModelo] = useState([]);
@@ -25,24 +28,24 @@ const CadVeiculos = ()=>{
     const [messageStatus, setMessageStatus] = useState(' ');
 
     const [foto1, setFoto1] = useState({
-        Url:undefined,
-        File:{}
+        dados:undefined,
+        file:""
     });
     const [foto2, setFoto2] = useState({
-        Url:undefined,
-        File:{}
+        dados:undefined,
+        file:""
     });
     const [foto3, setFoto3] = useState({
-        Url:undefined,
-        File:{}
+        dados:undefined,
+        file:""
     });
     const [foto4, setFoto4] = useState({
-        Url:undefined,
-        File:{}
+        dados:undefined,
+        file:""
     });
     const [foto5, setFoto5] = useState({
-        Url:undefined,
-        File:{}
+        dados:undefined,
+        file:""
     });
 
     const [optMarca, setOptMarca] = useState({
@@ -72,46 +75,92 @@ const CadVeiculos = ()=>{
     const [listVeiculos, setListVeiculos] = useState([]);
     const [filtro, setFiltro] = useState({});
     const [existeData, setexisteData] = useState(false);
+
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+    
+          fileReader.onload = () => {
+            resolve(fileReader.result);
+          };
+    
+          fileReader.onerror = (error) => {
+            reject(error);
+          };
+        });
+      };
     
     async function loadImages(div, evento){
         const objeto = evento.target.files[0];
-        const URLs = URL.createObjectURL(objeto);
-        switch (div) {
-            case 1:
-                setFoto1({
-                    Url:URLs,
-                    File: objeto
-                }); 
+        const base64 = await convertBase64(objeto);
+        if(objeto.size < maxSize){
+            switch (div) {
+                case 1:
+                    setFoto1({
+                        dados: {name:objeto.name,
+                            lastModified: objeto.lastModified,
+                            lastModifiedDate: objeto.lastModifiedDate,
+                            size: objeto.size,
+                            type: objeto.type
+                            },
+                        file: base64
+                    });
+                    break;
+                case 2:
+                    setFoto2({
+                        dados: {name:objeto.name,
+                            lastModified: objeto.lastModified,
+                            lastModifiedDate: objeto.lastModifiedDate,
+                            size: objeto.size,
+                            type: objeto.type
+                            },
+                        file: base64
+                    });
+                    break;
+                case 3:
+                    setFoto3({
+                        dados: {name:objeto.name,
+                            lastModified: objeto.lastModified,
+                            lastModifiedDate: objeto.lastModifiedDate,
+                            size: objeto.size,
+                            type: objeto.type
+                            },
+                        file: base64
+                    });
                 break;
-            case 2:
-                setFoto2({
-                    Url:URLs,
-                    File: objeto
-                });
-                break;
-            case 3:
-                setFoto3({
-                    Url:URLs,
-                    File: objeto
-                });
-                break;
-            case 4:
-                setFoto4({
-                    Url:URLs,
-                    File: objeto
-                });
-                break;
-            case 5:
-                setFoto5({
-                    Url:URLs,
-                    File: objeto
-                });
-                break;
+                case 4:
+                    setFoto4({
+                        dados: {name:objeto.name,
+                            lastModified: objeto.lastModified,
+                            lastModifiedDate: objeto.lastModifiedDate,
+                            size: objeto.size,
+                            type: objeto.type
+                            },
+                        file: base64
+                    });
+                    break;
+                case 5:
+                    setFoto5({
+                        dados: {name:objeto.name,
+                            lastModified: objeto.lastModified,
+                            lastModifiedDate: objeto.lastModifiedDate,
+                            size: objeto.size,
+                            type: objeto.type
+                            },
+                        file: base64
+                    });
+                    break;
         
-            default:
-                alert('Necessário setar o index do objeto de 1 a 5');
-                break;
-        }            
+                default:
+                    alert('Necessário setar o index do objeto de 1 a 5');
+                    break;
+            } 
+            setMaxSize(maxSize-objeto.size);
+        }
+        else{
+            alert("Você excedeu o limite de 50mb total de todas as imagens");
+        }           
     }
 
     useEffect(() => {
@@ -232,12 +281,13 @@ const CadVeiculos = ()=>{
         setStatusLoad(true);
         setMessageStatus('Loading data...');
         if(optMarca.codigo === undefined && optModelo.codigo === undefined && optAno.codigo === undefined){
-            alert('Selecioneas opções de marca, modelo e ano do veículo!');
+            alert('Selecione as opções de marca, modelo e ano do veículo!');
         }
         else{
             console.log('Gerando dados para inserção no banco........');
             const geraDados = {
-                id_anunciante:idUsuario,
+                id_usuario:idUsuario,
+                usuario: usuario,
                 ativo:true,
                 data_anuncio: Date.now(),
                 titulo:titulo,
@@ -254,20 +304,21 @@ const CadVeiculos = ()=>{
                     cor: cor,
                     descricao: descricao
                 },
-                fotos: [foto1]
-
+                fotos: {
+                    foto1: foto1,
+                    foto2: foto2,
+                    foto3: foto3,
+                    foto4: foto4,
+                    foto5: foto5
+                }
             };
-            console.log(foto1);
-            console.log(foto1.File);
-            console.log(foto1.File.name);
-
             console.log(geraDados);
             const response = await api.post('/cadastroAnuncio', geraDados);
+            console.log('Anuncio registrado com sucesso! - '+response.data);
             if(response.data.value){
-                alert('Anuncio registrado com sucesso! - '+response.caso);
-                console.log(geraDados);
+                setMessageStatus('Anuncio registrado com sucesso! - '+response.data);
             }
-            console.log(response);
+            console.log(response.data);
         }
         setStatusLoad(false);
     }
@@ -370,6 +421,8 @@ const CadVeiculos = ()=>{
                     />
                 </div>  
                 <div id="comboImages">
+                    Restantes: {maxSize}kb
+                    <br/>
                     <Img file={foto1} setaImg={setFoto1}>
                         <div>
                             <input type="file" value={e=> e.target.value = foto1} onChange={e=> loadImages(1, e)} /> 
@@ -415,7 +468,7 @@ const CadVeiculos = ()=>{
                                 <div>
                                     <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
                                     <div id="esquerda">
-                                        
+                                        <img src = {evento.fotos[0].foto1.file} alt = {evento.fotos[0].foto1.dados.name} />
                                         <p>{evento.veiculo.descricao}</p>
                                     </div>
                                     <div id="direita">
@@ -428,7 +481,7 @@ const CadVeiculos = ()=>{
                                         Combustível: {evento.veiculo.combustivel}<br/>
                                         <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
                                         <br/>
-                                        <a href="#">Vendedor_usuário</a>
+                                        <Link to = "/Usuaio?Id=56361901" >Vendedor: {evento.anunciante}</Link>
                                     </div>
                                 </div>
                             <div>

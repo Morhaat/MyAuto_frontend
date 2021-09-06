@@ -223,7 +223,7 @@ const PVeiculos = ()=>{
                                 <div>
                                     <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
                                     <div id="esquerda">
-                                        
+                                        <img src = {evento.fotos[0].foto1.file} alt = {evento.fotos[0].foto1.dados.name} />
                                         <p>{evento.veiculo.descricao}</p>
                                     </div>
                                     <div id="direita">
@@ -236,7 +236,7 @@ const PVeiculos = ()=>{
                                         Combustível: {evento.veiculo.combustivel}<br/>
                                         <h5>Valor {evento.veiculo.preco_venda}</h5>
                                         <br/>
-                                        <a href="#">Vendedor_usuário</a>
+                                        <Link to= {'/Usuarios/:id=56361901'}> Vendedor: {evento.anunciante}</Link>
                                     </div>
                                 </div>
                             <div>
