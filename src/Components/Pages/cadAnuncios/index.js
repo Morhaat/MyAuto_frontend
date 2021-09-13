@@ -13,7 +13,7 @@ const CadVeiculos = ()=>{
 
     const [idUsuario, setIdUsuario] = useState('56361901');
     const [usuario, setUsuario] = useState('Morhaat');
-    const [maxSize, setMaxSize] = useState(52428800);
+    const [maxSize, setMaxSize] = useState(10485760);
     //Estados dos Selects...............................................................................................
     const [selecaoMarca, setMarca] = useState([]);
     const [selecaoModelo, setModelo] = useState([]);
@@ -159,7 +159,7 @@ const CadVeiculos = ()=>{
             setMaxSize(maxSize-objeto.size);
         }
         else{
-            alert("Você excedeu o limite de 50mb total de todas as imagens");
+            alert("Você excedeu o limite de 10mb total de todas as imagens");
         }           
     }
 
