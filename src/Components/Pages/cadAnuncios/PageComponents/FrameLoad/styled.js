@@ -1,6 +1,7 @@
 import Styled from 'styled-components';
 
 const Div = Styled.div`
+    z-index: 9999;
     padding-top: 10px;  
     text-align: center;
     border-radius: 5px;

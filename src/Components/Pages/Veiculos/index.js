@@ -39,6 +39,14 @@ const PVeiculos = ()=>{
     const [Valores, setValores] = useState('');
     const [DivValores, setdivValores] = useState('');
 
+
+
+    function numberParaReal(numero){
+        var formatado = "R$ " + numero.toFixed(2).replace(".",",");
+        return formatado;
+    }
+
+
     useEffect(() => {
         async function loadMarcas(){
             const response = await axios.get('https://parallelum.com.br/fipe/api/v1/carros/marcas');
@@ -65,11 +73,11 @@ const PVeiculos = ()=>{
     }, [optModelo]);
 
    async function mudaEvalorInicial(e){
-        const valor = await setValorInicial(e.target.value);
+        const valor = setValorInicial(e.target.value);
         setEvalorInicial(valor);
     }
    async function mudaEvalorFinal(e){
-        const valor = await setValorFinal(e.target.value);
+        const valor = setValorFinal(e.target.value);
         setEvalorFinal(valor);
     }
 
@@ -223,7 +231,7 @@ const PVeiculos = ()=>{
                                 <div>
                                     <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
                                     <div id="esquerda">
-                                        <img src = {evento.fotos[0].foto1.file} alt = {evento.fotos[0].foto1.dados.name} />
+                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
                                         <p>{evento.veiculo.descricao}</p>
                                     </div>
                                     <div id="direita">
@@ -234,9 +242,9 @@ const PVeiculos = ()=>{
                                         Ano: {evento.veiculo.ano_modelo.caption}<br/>
                                         Cor: {evento.veiculo.cor}<br/>
                                         Combustível: {evento.veiculo.combustivel}<br/>
-                                        <h5>Valor {evento.veiculo.preco_venda}</h5>
+                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
                                         <br/>
-                                        <Link to= {'/Usuarios/:id=56361901'}> Vendedor: {evento.anunciante}</Link>
+                                        <Link to= {'/Usuarios/:id='+evento.id_usuario}> Vendedor: {evento.usuario}</Link>
                                     </div>
                                 </div>
                             <div>

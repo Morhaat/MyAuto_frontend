@@ -67,10 +67,14 @@ const CadVeiculos = ()=>{
      //Fim dos estados dos Selects...............................................................................................
 
      //Estados dos Edits de valores do filtro.............................................................................
-    const [valor, setValor] = useState(0);
-    const [evalor, setEvalor] = useState(null);
+     const [valor, setValor] = useState(null);
+     const [evalor, setEvalor] = useState(null);
     //Fim dos estados dos Edits de valores do filtro.............................................................................
-
+    
+    async function mudaEvalor(e){
+        const valor = setValor(e.target.value);
+        setEvalor(valor);
+    }
 
     const [listVeiculos, setListVeiculos] = useState([]);
     const [filtro, setFiltro] = useState({});
@@ -91,6 +95,39 @@ const CadVeiculos = ()=>{
         });
       };
     
+    function limpaDados(){
+        setMarca([]);
+        setModelo([]);
+        setAnoModelo([]);
+        setDadosFipe([]);
+        setTitulo('');
+        setCor('');
+        setKilometragem('');
+        setDescricao('');
+        setValor(0);
+        setEvalor(0);
+        setFoto1({
+            dados:undefined,
+            file:null
+        });
+        setFoto2({
+            dados:undefined,
+            file:null
+        });
+        setFoto3({
+            dados:undefined,
+            file:null
+        });
+        setFoto4({
+            dados:undefined,
+            file:null
+        });
+        setFoto5({
+            dados:undefined,
+            file:null
+        });
+    };
+
     async function loadImages(div, evento){
         const objeto = evento.target.files[0];
         const base64 = await convertBase64(objeto);
@@ -194,11 +231,6 @@ const CadVeiculos = ()=>{
         }
         loadAnoModelo();
     }, [optAno]);
-
-   async function mudaEvalor(e){
-        const valor = await e.target.value;
-        setEvalor(valor);
-    }
 
     useEffect(()=>{
         async function loadAnuncios(){
@@ -314,13 +346,15 @@ const CadVeiculos = ()=>{
             };
             console.log(geraDados);
             const response = await api.post('/cadastroAnuncio', geraDados);
-            console.log('Anuncio registrado com sucesso! - '+response.data);
             if(response.data.value){
-                setMessageStatus('Anuncio registrado com sucesso! - '+response.data);
+                setMessageStatus('Anuncio registrado com sucesso! - ');
             }
             console.log(response.data);
+            setTimeout(function(){
+                setStatusLoad(false);
+                limpaDados();
+            }, 3000);
         }
-        setStatusLoad(false);
     }
 
     function numberParaReal(numero){
@@ -416,7 +450,7 @@ const CadVeiculos = ()=>{
                         id="vlInicial" 
                         required 
                         placeholder="0,00" 
-                        value={evalor}
+                        value= {evalor}
                         onChange= {e=> mudaEvalor(e)} 
                     />
                 </div>  
@@ -468,7 +502,7 @@ const CadVeiculos = ()=>{
                                 <div>
                                     <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
                                     <div id="esquerda">
-                                        <img src = {evento.fotos[0].foto1.file} alt = {evento.fotos[0].foto1.dados.name} />
+                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
                                         <p>{evento.veiculo.descricao}</p>
                                     </div>
                                     <div id="direita">
@@ -481,7 +515,7 @@ const CadVeiculos = ()=>{
                                         Combustível: {evento.veiculo.combustivel}<br/>
                                         <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
                                         <br/>
-                                        <Link to = "/Usuaio?Id=56361901" >Vendedor: {evento.anunciante}</Link>
+                                        <Link to = "/Usuaio?Id=56361901" >Vendedor: {evento.usuario}</Link>
                                     </div>
                                 </div>
                             <div>
