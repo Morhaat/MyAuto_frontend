@@ -223,36 +223,7 @@ const PVeiculos = ()=>{
             </form>
             </div>
             <div id="divSection">
-                {   existeData
-                    ? listVeiculos.map(evento => (
-                        <section key = {evento._id} id="sessoes">
-                                <div>
-                                    <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
-                                    <div id="esquerda">
-                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
-                                        <p>{evento.veiculo.descricao}</p>
-                                    </div>
-                                    <div id="direita">
-                                        <h4>Dados do veículo:</h4>
-                                        <br/>
-                                        Marca: {evento.veiculo.marca.caption}<br/>
-                                        Modelo: {evento.veiculo.modelo.caption}<br/>
-                                        Ano: {evento.veiculo.ano_modelo.caption}<br/>
-                                        Cor: {evento.veiculo.cor}<br/>
-                                        Combustível: {evento.veiculo.combustivel}<br/>
-                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
-                                        <br/>
-                                        <Link to = {"/"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
-                                        <img />
-                                    </div>
-                                </div>
-                            <div>
-                                <hr/>
-                            </div>
-                        </section>
-                    ))
-                    : listVeiculos.map(evento => (<p key= {evento.error}>{evento.error}</p>))
-                }
+               
                 
             </div>
         </Div>
