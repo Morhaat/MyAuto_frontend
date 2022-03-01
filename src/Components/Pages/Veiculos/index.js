@@ -39,8 +39,6 @@ const PVeiculos = ()=>{
     const [Valores, setValores] = useState('');
     const [DivValores, setdivValores] = useState('');
 
-
-
     function numberParaReal(numero){
         var formatado = "R$ " + numero.toFixed(2).replace(".",",");
         return formatado;
@@ -244,7 +242,8 @@ const PVeiculos = ()=>{
                                         Combustível: {evento.veiculo.combustivel}<br/>
                                         <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
                                         <br/>
-                                        <Link to= {'/Usuarios/:id='+evento.id_usuario}> Vendedor: {evento.usuario}</Link>
+                                        <Link to = {"/"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
+                                        <img />
                                     </div>
                                 </div>
                             <div>

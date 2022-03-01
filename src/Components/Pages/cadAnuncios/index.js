@@ -10,9 +10,6 @@ import {Link} from 'react-router-dom';
 
 const CadVeiculos = ()=>{  
 
-
-    const [idUsuario, setIdUsuario] = useState('56361901');
-    const [usuario, setUsuario] = useState('Morhaat');
     const [maxSize, setMaxSize] = useState(10485760);
     //Estados dos Selects...............................................................................................
     const [selecaoMarca, setMarca] = useState([]);
@@ -318,8 +315,8 @@ const CadVeiculos = ()=>{
         else{
             console.log('Gerando dados para inserção no banco........');
             const geraDados = {
-                id_usuario:idUsuario,
-                usuario: usuario,
+                id_usuario:'idUsuario',
+                usuario: 'usuario',
                 ativo:true,
                 data_anuncio: Date.now(),
                 titulo:titulo,
@@ -515,7 +512,7 @@ const CadVeiculos = ()=>{
                                         Combustível: {evento.veiculo.combustivel}<br/>
                                         <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
                                         <br/>
-                                        <Link to = "/Usuaio?Id=56361901" >Vendedor: {evento.usuario}</Link>
+                                        <Link to = {"/usuario:"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
                                     </div>
                                 </div>
                             <div>

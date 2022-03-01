@@ -26,8 +26,8 @@ export default () => {
                 <CadVeiculos/>            
             </Route>
 
-            <Route exact path='/:id' component={<Usuario/>}>
-                <Usuario/>           
+            <Route exact path='/usuario:id' component={<Usuario/>}>
+                          
             </Route>
 
             <Route exact path='/Contato'>
@@ -37,6 +37,9 @@ export default () => {
             <Route exact path='/Sobre'>
                 <Sobre/>            
             </Route>
+
+            <Route path="*" component={() => <h1>Página não encontrada!</h1>} />
+            
         </Switch>
     );
 }
