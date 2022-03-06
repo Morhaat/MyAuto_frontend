@@ -25,9 +25,7 @@ const PVeiculos = ()=>{
                         `https://parallelum.com.br/fipe/api/v1/carros/marcas/${e.target.value}/modelos`)
                         }>
                         <option key='00' value=''> Selecione uma marca </option>
-                        {selecaoMarca.map(selecaoMarca => (
-                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome} </option>
-                        ))}
+
                     </select>
                 </div>
 
@@ -36,9 +34,7 @@ const PVeiculos = ()=>{
                     <br/>
                     <select id='selecaoModelos' onChange= {(e) => setOptModelo(`${optMarca}/${e.target.value}/anos`)} >
                         <option key='00' value=''> Selecione um modelo </option>
-                        {selecaoModelo.map(selecaoModelo => (
-                        <option key={selecaoModelo.codigo} value={selecaoModelo.codigo}>{selecaoModelo.nome}</option>
-                        ))}    
+    
                     </select>
                 </div>
 
@@ -47,9 +43,7 @@ const PVeiculos = ()=>{
                     <br/>
                     <select id='selecaoAnos' onChange= {(e) => setOptAno(`${optModelo}/${e.target.value}`)}>
                         <option key='00' value=''> Selecione um ano </option>
-                        {selecaoAno.map(selecaoAno => (
-                        <option key={selecaoAno.codigo} value={selecaoAno.codigo}>{selecaoAno.nome}</option>
-                        ))}
+
                     </select>
                 </div>
                 
@@ -108,36 +102,7 @@ const PVeiculos = ()=>{
             </form>
             </div>
             <div id="divSection">
-                {   existeData
-                    ? listVeiculos.map(evento => (
-                        <section key = {evento._id} id="sessoes">
-                                <div>
-                                    <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
-                                    <div id="esquerda">
-                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
-                                        <p>{evento.veiculo.descricao}</p>
-                                    </div>
-                                    <div id="direita">
-                                        <h4>Dados do veículo:</h4>
-                                        <br/>
-                                        Marca: {evento.veiculo.marca.caption}<br/>
-                                        Modelo: {evento.veiculo.modelo.caption}<br/>
-                                        Ano: {evento.veiculo.ano_modelo.caption}<br/>
-                                        Cor: {evento.veiculo.cor}<br/>
-                                        Combustível: {evento.veiculo.combustivel}<br/>
-                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
-                                        <br/>
-                                        <Link to = {"/"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
-                                        <img />
-                                    </div>
-                                </div>
-                            <div>
-                                <hr/>
-                            </div>
-                        </section>
-                    ))
-                    : listVeiculos.map(evento => (<p key= {evento.error}>{evento.error}</p>))
-                }
+               
                 
             </div>
         </Div>
@@ -259,6 +224,137 @@ export default PVeiculos;
     }
     const [limpador, setLimpador] = useState(limpa);
 
-    
+   return(
+        <Div>
+            <div id="divLink">
+                <Link to='/cadAnuncios'>Anunciar um veículo</Link>
+            </div>
+            <div id="divForm">
+            <form id='bordaSelect'>
+                <h4>Filtros</h4>
+                <div id='divMarca'>
+                    <label>Marca</label>
+                    <br/>
+                    <select id='selecaoMarcas' onChange= {(e) => setOptMarca(
+                        `https://parallelum.com.br/fipe/api/v1/carros/marcas/${e.target.value}/modelos`)
+                        }>
+                        <option key='00' value=''> Selecione uma marca </option>
+                        {selecaoMarca.map(selecaoMarca => (
+                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome} </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div id='divModelo'>
+                    <label>Modelo</label>
+                    <br/>
+                    <select id='selecaoModelos' onChange= {(e) => setOptModelo(`${optMarca}/${e.target.value}/anos`)} >
+                        <option key='00' value=''> Selecione um modelo </option>
+                        {selecaoModelo.map(selecaoModelo => (
+                        <option key={selecaoModelo.codigo} value={selecaoModelo.codigo}>{selecaoModelo.nome}</option>
+                        ))}    
+                    </select>
+                </div>
+
+                <div id='divAno'>
+                    <label>Ano</label>
+                    <br/>
+                    <select id='selecaoAnos' onChange= {(e) => setOptAno(`${optModelo}/${e.target.value}`)}>
+                        <option key='00' value=''> Selecione um ano </option>
+                        {selecaoAno.map(selecaoAno => (
+                        <option key={selecaoAno.codigo} value={selecaoAno.codigo}>{selecaoAno.nome}</option>
+                        ))}
+                    </select>
+                </div>
+                
+                <div id="divCor">
+                    <label htmlFor="corVeiculo">Cor do veículo</label>
+                    <br/>
+                    <input type="text" name="corVeiculo" id="corVeiculo" value={cor} onChange={e=> setCor(e.target.value)} />
+                </div>
+
+                <div id="comboValores">
+                    <div id="divValoresInicial">
+                        <label htmlFor="vlInicial">Valor inicial</label>
+                        <br/>
+                        <CurrencyInput 
+                            name="vlInicial" 
+                            id="vlInicial" 
+                            required 
+                            placeholder="0,00" 
+                            value={evalorInicial}
+                            onChange= {e=> mudaEvalorInicial(e)} 
+                        />
+                    </div>
+
+                    <div id='divX'>
+                        <label></label>
+                        <br/>
+                        <p>X</p>
+                    </div>
+
+                    <div id='divValoresFinal'>
+                        <label>Valor final</label>
+                        <br/>
+                        <CurrencyInput 
+                            name='vlFinal' 
+                            id='vlFinal' 
+                            required 
+                            placeholder='0,00' 
+                            value = {evalorFinal}
+                            onChange= {(e)=> mudaEvalorFinal(e)} 
+                        />
+                    </div>
+                </div> 
+
+                <div id='divBtLimpa'>
+                    <label></label>
+                    <br/>
+                    <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros ' onClick={limpa} />
+                </div>      
+
+                <div id='divBtFiltra'>
+                    <label></label>
+                    <br/>
+                    <input name='btFiltrar' id='btFiltrar' type='Button' value=' Filtrar ' />
+                </div>
+
+            </form>
+            </div>
+            <div id="divSection">
+                {   existeData
+                    ? listVeiculos.map(evento => (
+                        <section key = {evento._id} id="sessoes">
+                                <div>
+                                    <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
+                                    <div id="esquerda">
+                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
+                                        <p>{evento.veiculo.descricao}</p>
+                                    </div>
+                                    <div id="direita">
+                                        <h4>Dados do veículo:</h4>
+                                        <br/>
+                                        Marca: {evento.veiculo.marca.caption}<br/>
+                                        Modelo: {evento.veiculo.modelo.caption}<br/>
+                                        Ano: {evento.veiculo.ano_modelo.caption}<br/>
+                                        Cor: {evento.veiculo.cor}<br/>
+                                        Combustível: {evento.veiculo.combustivel}<br/>
+                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
+                                        <br/>
+                                        <Link to = {"/"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
+                                        <img />
+                                    </div>
+                                </div>
+                            <div>
+                                <hr/>
+                            </div>
+                        </section>
+                    ))
+                    : listVeiculos.map(evento => (<p key= {evento.error}>{evento.error}</p>))
+                }
+                
+            </div>
+        </Div>
+    ); 
    
 */
