@@ -41,10 +41,10 @@ const PVeiculos = ()=>{
         return formatado;
     }
 
-
+    //'https://parallelum.com.br/fipe/api/v1/carros/marcas'
     useEffect(() => {
         async function loadMarcas(){
-            const response = await axios.get('https://parallelum.com.br/fipe/api/v1/carros/marcas');
+            const response = await axios.get();
             setMarca(response.data);
             
         }
