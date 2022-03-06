@@ -137,9 +137,7 @@ const PVeiculos = ()=>{
                         `https://parallelum.com.br/fipe/api/v1/carros/marcas/${e.target.value}/modelos`)
                         }>
                         <option key='00' value=''> Selecione uma marca </option>
-                        {selecaoMarca.map(selecaoMarca => (
-                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome} </option>
-                        ))}
+                        
                     </select>
                 </div>
 
