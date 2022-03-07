@@ -7,9 +7,53 @@ import Img from './componentImg';
 import { Link } from 'react-router-dom';
 
 
+const PVeiculos = ()=>{ 
+    
+    const [existeData, setexisteData] = useState(false);
+    const [listVeiculos, setListVeiculos] = useState([]);
+    const [filtro, setFiltro] = useState({});
+
+    function numberParaReal(numero){
+        var formatado = "R$ " + numero.toFixed(2).replace(".",",");
+        return formatado;
+    }
+
+    useEffect(()=>{
+        async function loadAnuncios(){
+            await api.get('/anuncios', {filtro})
+            .then((response) => {
+                console.log(response.data.resultFiltro);
+                if (response.data.resultFiltro.length === 0){
+                    setexisteData(false);
+                    setListVeiculos([{error:'Não existem registros com estes dados!'}]);    
+                }
+                else{
+                    setexisteData(true);
+                    setListVeiculos(response.data.resultFiltro);  
+                }
+            })
+            .catch((error)=> {
+                if (error.response){
+                    setexisteData(false);
+                    setListVeiculos([{error:' *Sem resposta* - '+error.response.data}]); 
+                }
+                else if (error.request){
+                    setexisteData(false);
+                    setListVeiculos([{error:'Houve uma falha durante a requisição! - '+error.request+' - '+error.message}]); 
+                }
+            }) 
+        }
+
+        loadAnuncios();
+    } ,[filtro])
 
 
-const PVeiculos = ()=>{   
+
+
+
+
+
+
     return(
         <Div>
             <div id="divLink">
@@ -95,6 +139,39 @@ const PVeiculos = ()=>{
                     </div>
 
                 </form>
+            </div>
+            <div id="divSection">
+                {   existeData
+                    ? listVeiculos.map(evento => (
+                        <section key = {evento._id} id="sessoes">
+                                <div>
+                                    <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
+                                    <div id="esquerda">
+                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
+                                        <p>{evento.veiculo.descricao}</p>
+                                    </div>
+                                    <div id="direita">
+                                        <h4>Dados do veículo:</h4>
+                                        <br/>
+                                        Marca: {evento.veiculo.marca.caption}<br/>
+                                        Modelo: {evento.veiculo.modelo.caption}<br/>
+                                        Ano: {evento.veiculo.ano_modelo.caption}<br/>
+                                        Cor: {evento.veiculo.cor}<br/>
+                                        Combustível: {evento.veiculo.combustivel}<br/>
+                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
+                                        <br/>
+                                        <Link to = {"/"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
+                                        <img />
+                                    </div>
+                                </div>
+                            <div>
+                                <hr/>
+                            </div>
+                        </section>
+                    ))
+                    : listVeiculos.map(evento => (<p key= {evento.error}>{evento.error}</p>))
+                }
+                
             </div>
         </Div>
     );
