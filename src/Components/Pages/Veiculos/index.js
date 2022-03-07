@@ -15,7 +15,87 @@ const PVeiculos = ()=>{
             <div id="divLink">
                 <Link to='/cadAnuncios'>Anunciar um veículo</Link>
             </div>
-            
+            <div id="divForm">
+                <form id='bordaSelect'>
+                    <h4>Filtros</h4>
+                    <div id='divMarca'>
+                        <label>Marca</label>
+                        <br/>
+                        <select id='selecaoMarcas' onChange= "">
+                            <option key='00' value=''> Selecione uma marca </option>
+                        </select>
+                    </div>
+
+                    <div id='divModelo'>
+                        <label>Modelo</label>
+                        <br/>
+                        <select id='selecaoModelos' onChange= "" >
+                            <option key='00' value=''> Selecione um modelo </option>   
+                        </select>
+                    </div>
+
+                    <div id='divAno'>
+                        <label>Ano</label>
+                        <br/>
+                        <select id='selecaoAnos' onChange= "">
+                            <option key='00' value=''> Selecione um ano </option>
+                        </select>
+                    </div>
+                
+                    <div id="divCor">
+                        <label htmlFor="corVeiculo">Cor do veículo</label>
+                        <br/>
+                        <input type="text" name="corVeiculo" id="corVeiculo" value="Preto" onChange="" />
+                    </div>
+
+                    <div id="comboValores">
+                        <div id="divValoresInicial">
+                            <label htmlFor="vlInicial">Valor inicial</label>
+                            <br/>
+                            <CurrencyInput 
+                                name="vlInicial" 
+                                id="vlInicial" 
+                                required 
+                                placeholder="0,00" 
+                                value='0.00'
+                                onChange= "" 
+                            />
+                        </div>
+
+                        <div id='divX'>
+                            <label></label>
+                            <br/>
+                            <p>X</p>
+                        </div>
+
+                        <div id='divValoresFinal'>
+                            <label>Valor final</label>
+                            <br/>
+                            <CurrencyInput 
+                                name='vlFinal' 
+                                id='vlFinal' 
+                                required 
+                                placeholder='0,00' 
+                                value = '0,00'
+                                onChange= "" 
+                            />
+                        </div>
+                    </div> 
+
+                    <div id='divBtLimpa'>
+                        <label></label>
+                        <br/>
+                        <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros ' onClick="" />
+                    </div>      
+
+                    <div id='divBtFiltra'>
+                        <label></label>
+                        <br/>
+                        <input name='btFiltrar' id='btFiltrar' type='Button' value=' Filtrar ' />
+                    </div>
+
+                </form>
+            </div>
         </Div>
     );
 
