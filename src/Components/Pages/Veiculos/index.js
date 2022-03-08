@@ -69,7 +69,7 @@ const PVeiculos = ()=>{
         
         }
         loadMarcas();
-    }, []);
+    }, [optMarca]);
 
     useEffect(() => {
         if (!optMarca ==''){
@@ -82,14 +82,49 @@ const PVeiculos = ()=>{
     }, [optMarca]);
 
     useEffect(() => {
-        async function loadAnoModelo(){
-            const response = await axios.get(optModelo);
-            setAnoModelo(response.data);
+        if(!optModelo==''){
+            async function loadAnoModelo(){
+                const response = await axios.get(optModelo);
+                setAnoModelo(response.data);
+            }
+            loadAnoModelo();
         }
-        loadAnoModelo();
     }, [optModelo]);
+//........................................................................................................
 
 
+
+//Estados dos Edits de valores do filtro.............................................................................
+     const [valorInicial, setValorInicial] = useState(0);
+     const [valorFinal, setValorFinal] = useState(0);
+     const [evalorInicial, setEvalorInicial] = useState(null);
+     const [evalorFinal, setEvalorFinal] = useState();
+     const [cor, setCor] = useState('');
+//Fim dos estados dos Edits de valores do filtro.............................................................................
+    async function mudaEvalorInicial(e){
+        const valor = setValorInicial(e.target.value);
+        setEvalorInicial(valor);
+    }
+    async function mudaEvalorFinal(e){
+        const valor = setValorFinal(e.target.value);
+        setEvalorFinal(valor);
+    }
+
+    const limpa = function limpaFiltros(){
+        setMarca([]);
+        setModelo([]);
+        setAnoModelo([]);
+        setOptMarca('');
+        setOptModelo('');
+        setOptAno('');
+        setValorInicial(null);
+        setValorFinal(null);
+        setEvalorInicial('');
+        setEvalorFinal('');
+        setCor('');
+        setFiltro({});
+    }
+    const [limpador, setLimpador] = useState(limpa);
 
 
     return(
@@ -125,64 +160,69 @@ const PVeiculos = ()=>{
                     </div>
 
                     <div id='divAno'>
-                        <label>Ano</label>
-                        <br/>
-                        <select id='selecaoAnos' >
-                            <option key='00' value=''> Selecione um ano </option>
-                        </select>
-                    </div>
+                    <label>Ano</label>
+                    <br/>
+                    <select id='selecaoAnos' onChange= {(e) => setOptAno(`${optModelo}/${e.target.value}`)}>
+                        <option key='00' value=''> Selecione um ano </option>
+                        {selecaoAno.map(selecaoAno => (
+                        <option key={selecaoAno.codigo} value={selecaoAno.codigo}>{selecaoAno.nome}</option>
+                        ))}
+                    </select>
+                </div>
                 
-                    <div id="divCor">
-                        <label htmlFor="corVeiculo">Cor do veículo</label>
+                <div id="divCor">
+                    <label htmlFor="corVeiculo">Cor do veículo</label>
+                    <br/>
+                    <input type="text" name="corVeiculo" id="corVeiculo" value={cor} onChange={e=> setCor(e.target.value)} />
+                </div>
+
+                <div id="comboValores">
+                    <div id="divValoresInicial">
+                        <label htmlFor="vlInicial">Valor inicial</label>
                         <br/>
-                        <input type="text" name="corVeiculo" id="corVeiculo" value="Preto"  />
+                        <CurrencyInput 
+                            name="vlInicial" 
+                            id="vlInicial" 
+                            required 
+                            placeholder="0,00" 
+                            value={evalorInicial}
+                            onChange= {e=> mudaEvalorInicial(e)} 
+                        />
                     </div>
 
-                    <div id="comboValores">
-                        <div id="divValoresInicial">
-                            <label htmlFor="vlInicial">Valor inicial</label>
-                            <br/>
-                            <CurrencyInput 
-                                name="vlInicial" 
-                                id="vlInicial" 
-                                required 
-                                placeholder="0,00" 
-                                value='0.00'
-                            />
-                        </div>
-
-                        <div id='divX'>
-                            <label></label>
-                            <br/>
-                            <p>X</p>
-                        </div>
-
-                        <div id='divValoresFinal'>
-                            <label>Valor final</label>
-                            <br/>
-                            <CurrencyInput 
-                                name='vlFinal' 
-                                id='vlFinal' 
-                                required 
-                                placeholder='0,00' 
-                                value = '0,00'
-                            />
-                        </div>
-                    </div> 
-
-                    <div id='divBtLimpa'>
+                    <div id='divX'>
                         <label></label>
                         <br/>
-                        <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros '/>
-                    </div>      
-
-                    <div id='divBtFiltra'>
-                        <label></label>
-                        <br/>
-                        <input name='btFiltrar' id='btFiltrar' type='Button' value=' Filtrar ' />
+                        <p>X</p>
                     </div>
 
-                </form>
+                    <div id='divValoresFinal'>
+                        <label>Valor final</label>
+                        <br/>
+                        <CurrencyInput 
+                            name='vlFinal' 
+                            id='vlFinal' 
+                            required 
+                            placeholder='0,00' 
+                            value = {evalorFinal}
+                            onChange= {(e)=> mudaEvalorFinal(e)} 
+                        />
+                    </div>
+                </div> 
+
+                <div id='divBtLimpa'>
+                    <label></label>
+                    <br/>
+                    <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros ' onClick={limpa} />
+                </div>      
+
+                <div id='divBtFiltra'>
+                    <label></label>
+                    <br/>
+                    <input name='btFiltrar' id='btFiltrar' type='Button' value=' Filtrar ' />
+                </div>
+
+            </form>
             </div>
             <div id="divSection">
                 {   existeData
