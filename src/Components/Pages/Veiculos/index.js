@@ -72,11 +72,13 @@ const PVeiculos = ()=>{
     }, []);
 
     useEffect(() => {
-        async function loadModelos(){
-            const response = await axios.get(optMarca);
-            setModelo(response.data.modelos);
+        if (!optMarca ==''){
+            async function loadModelos(){
+                const response = await axios.get(optMarca);
+                setModelo(response.data.modelos);
+            }
+            loadModelos();
         }
-        loadModelos();
     }, [optMarca]);
 
     useEffect(() => {
@@ -125,7 +127,7 @@ const PVeiculos = ()=>{
                     <div id='divAno'>
                         <label>Ano</label>
                         <br/>
-                        <select id='selecaoAnos' onChange= "">
+                        <select id='selecaoAnos' >
                             <option key='00' value=''> Selecione um ano </option>
                         </select>
                     </div>
@@ -133,7 +135,7 @@ const PVeiculos = ()=>{
                     <div id="divCor">
                         <label htmlFor="corVeiculo">Cor do veículo</label>
                         <br/>
-                        <input type="text" name="corVeiculo" id="corVeiculo" value="Preto" onChange="" />
+                        <input type="text" name="corVeiculo" id="corVeiculo" value="Preto"  />
                     </div>
 
                     <div id="comboValores">
@@ -146,7 +148,6 @@ const PVeiculos = ()=>{
                                 required 
                                 placeholder="0,00" 
                                 value='0.00'
-                                onChange= "" 
                             />
                         </div>
 
@@ -165,7 +166,6 @@ const PVeiculos = ()=>{
                                 required 
                                 placeholder='0,00' 
                                 value = '0,00'
-                                onChange= "" 
                             />
                         </div>
                     </div> 
@@ -173,7 +173,7 @@ const PVeiculos = ()=>{
                     <div id='divBtLimpa'>
                         <label></label>
                         <br/>
-                        <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros ' onClick="" />
+                        <input name='btLimpar' id='btLimpar' type='Button' value=' Limpar filtros '/>
                     </div>      
 
                     <div id='divBtFiltra'>
