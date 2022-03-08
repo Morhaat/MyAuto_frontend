@@ -203,10 +203,10 @@ const CadVeiculos = ()=>{
             setMarca(response.data);
         }
         loadMarcas();
-    }, [selecaoMarca]);
+    }, [optMarca]);
 
     useEffect(() => {
-        if(!optMarca==''){
+        if(!optMarca.link==''){
             async function loadModelos(){
                 const response = await axios.get(optMarca.link);
                 setModelo(response.data.modelos);
@@ -216,7 +216,7 @@ const CadVeiculos = ()=>{
     }, [optMarca]);
 
     useEffect(() => {
-        if(!optModelo==''){
+        if(!optModelo.link==''){
             async function loadAnoModelo(){
                 const response = await axios.get(optModelo.link);
                 setAnoModelo(response.data);
@@ -226,7 +226,7 @@ const CadVeiculos = ()=>{
     }, [optModelo]);
 
     useEffect(() => {
-        if(!optAno==''){
+        if(!optAno.link==''){
             async function loadAnoModelo(){
                 const response = await axios.get(optAno.link);
                 setDadosFipe(response.data);
