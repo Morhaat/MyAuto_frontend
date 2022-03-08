@@ -8,7 +8,11 @@ import { Link } from 'react-router-dom';
 
 
 const PVeiculos = ()=>{ 
+
     
+
+//Load api anuncios......................................................................
+
     const [existeData, setexisteData] = useState(false);
     const [listVeiculos, setListVeiculos] = useState([]);
     const [filtro, setFiltro] = useState({});
@@ -46,8 +50,26 @@ const PVeiculos = ()=>{
 
         loadAnuncios();
     } ,[filtro])
+//........................................................................................................
 
 
+//Selects api veículos.........................................................................
+
+    const [selecaoMarca, setMarca] = useState([]);
+    const [selecaoModelo, setModelo] = useState([]);
+    const [selecaoAno, setAnoModelo] = useState([]);
+    const [optMarca, setOptMarca] = useState('');
+    const [optModelo, setOptModelo] = useState('');
+    const [optAno, setOptAno] = useState('');
+
+    useEffect(() => {
+        async function loadMarcas(){
+            const response = await axios.get('https://parallelum.com.br/fipe/api/v1/carros/marcas');
+            setMarca(response.data);
+        
+        }
+        loadMarcas();
+    }, []);
 
 
 
@@ -65,8 +87,13 @@ const PVeiculos = ()=>{
                     <div id='divMarca'>
                         <label>Marca</label>
                         <br/>
-                        <select id='selecaoMarcas' onChange= "">
-                            <option key='00' value=''> Selecione uma marca </option>
+                        <select id='selecaoMarcas' onChange= {(e) => setOptMarca(
+                        `https://parallelum.com.br/fipe/api/v1/carros/marcas/${e.target.value}/modelos`)
+                        }>
+                        <option key='00' value=''> Selecione uma marca </option>
+                        {selecaoMarca.map(selecaoMarca => (
+                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome} </option>
+                        ))}
                         </select>
                     </div>
 
