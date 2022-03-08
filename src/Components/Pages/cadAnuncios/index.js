@@ -206,27 +206,33 @@ const CadVeiculos = ()=>{
     }, [selecaoMarca]);
 
     useEffect(() => {
-        async function loadModelos(){
-            const response = await axios.get(optMarca.link);
-            setModelo(response.data.modelos);
+        if(!optMarca==''){
+            async function loadModelos(){
+                const response = await axios.get(optMarca.link);
+                setModelo(response.data.modelos);
+            }
+            loadModelos();
         }
-        loadModelos();
     }, [optMarca]);
 
     useEffect(() => {
-        async function loadAnoModelo(){
-            const response = await axios.get(optModelo.link);
-            setAnoModelo(response.data);
+        if(!optModelo==''){
+            async function loadAnoModelo(){
+                const response = await axios.get(optModelo.link);
+                setAnoModelo(response.data);
+            }
+            loadAnoModelo();
         }
-        loadAnoModelo();
     }, [optModelo]);
 
     useEffect(() => {
-        async function loadAnoModelo(){
-            const response = await axios.get(optAno.link);
-            setDadosFipe(response.data);
+        if(!optAno==''){
+            async function loadAnoModelo(){
+                const response = await axios.get(optAno.link);
+                setDadosFipe(response.data);
+            }
+            loadAnoModelo();
         }
-        loadAnoModelo();
     }, [optAno]);
 
     useEffect(()=>{
