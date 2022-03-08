@@ -71,7 +71,21 @@ const PVeiculos = ()=>{
         loadMarcas();
     }, []);
 
+    useEffect(() => {
+        async function loadModelos(){
+            const response = await axios.get(optMarca);
+            setModelo(response.data.modelos);
+        }
+        loadModelos();
+    }, [optMarca]);
 
+    useEffect(() => {
+        async function loadAnoModelo(){
+            const response = await axios.get(optModelo);
+            setAnoModelo(response.data);
+        }
+        loadAnoModelo();
+    }, [optModelo]);
 
 
 
@@ -92,7 +106,7 @@ const PVeiculos = ()=>{
                         }>
                         <option key='00' value=''> Selecione uma marca </option>
                         {selecaoMarca.map(selecaoMarca => (
-                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome} </option>
+                        <option key={selecaoMarca.codigo} value={selecaoMarca.codigo}>{selecaoMarca.nome}</option>
                         ))}
                         </select>
                     </div>
@@ -100,8 +114,11 @@ const PVeiculos = ()=>{
                     <div id='divModelo'>
                         <label>Modelo</label>
                         <br/>
-                        <select id='selecaoModelos' onChange= "" >
-                            <option key='00' value=''> Selecione um modelo </option>   
+                        <select id='selecaoModelos' onChange= {(e) => setOptModelo(`${optMarca}/${e.target.value}/anos`)} >
+                            <option key='00' value=''> Selecione um modelo </option>
+                            {selecaoModelo.map(selecaoModelo => (
+                            <option key={selecaoModelo.codigo} value={selecaoModelo.codigo}>{selecaoModelo.nome}</option>
+                            ))}    
                         </select>
                     </div>
 
