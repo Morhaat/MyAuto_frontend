@@ -6,7 +6,7 @@ import api from '../../../Services/api';
 
 async function realizaLogin(credentials){
     const chave= credentials;
-    api.get('/login', {
+    return api.get('/login', {
         headers: {
             Authorization: `Basic ` +chave //the token is a variable which holds the token
         }
@@ -22,14 +22,24 @@ export default function Login({ setToken }) {
     localStorage.clear();
     const [user, setUser] = useState('');
     const [pswd, setPswd] = useState('');
-
+    const [msgAlert, setMsgAlert] = useState('');
     const handleSubmit = async e => {
         e.preventDefault();
         const dados = Buffer.from(`${user}:${pswd}`, 'utf8').toString('base64');
         const token = await realizaLogin(dados);
         localStorage.setItem("Token", token);
-        setToken(token);
-        console.log(token)
+        if(token.value){
+            setToken(token);
+        }
+        else{
+
+            setMsgAlert(token.caso);
+
+            setTimeout(function(){
+                setMsgAlert('');
+            }, 5000);
+        }
+        
     }
 
     const mudaUser = event => {
@@ -52,6 +62,8 @@ export default function Login({ setToken }) {
                 <input type= "password" name='password' id='password' value={pswd} onChange={mudaPswd}/>
                 <br/> 
                 <input type="submit" name="btLogin" id="btLogin" value=" Login "/>
+                <br/>
+                <label id='alertaLogin'>{msgAlert}</label>
             </form>
         </Div>
     );

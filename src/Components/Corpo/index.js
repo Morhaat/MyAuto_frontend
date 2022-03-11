@@ -10,7 +10,7 @@ import CadVeiculos from '../Pages/cadAnuncios';
 import Usuario from '../Pages/Usuarios';
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+export default ()=>{
     const [token, setToken] = useState();
     if(!token){
         return <Login setToken={setToken}/>

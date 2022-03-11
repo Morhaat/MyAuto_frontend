@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import './global.css';
 import './App.css';
@@ -7,16 +7,17 @@ import Footer from './Components/Footer';
 import Corpo from './Components/Corpo';
 
 function App() {
+
   return ( 
-    <BrowserRouter>
+      <BrowserRouter>
     
-      <Header></Header>
+        <Header></Header>
       
-      <Corpo></Corpo>
+        <Corpo></Corpo>
 
-      <Footer></Footer>
+        <Footer></Footer>
 
-    </BrowserRouter>
+      </BrowserRouter>
    );
 }
 

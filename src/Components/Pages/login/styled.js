@@ -1,7 +1,10 @@
 import styled from 'styled-components';
+import Login from './index';
 
 const Div = styled.div`
-    
+    Label{
+        color: #FFFFFF;
+    }
     #formLogin{
         display: flex;
         flex-direction: column;
