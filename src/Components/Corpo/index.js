@@ -8,11 +8,45 @@ import Contato from '../Pages/Contato';
 import Sobre from '../Pages/Sobre';
 import CadVeiculos from '../Pages/cadAnuncios';
 import Usuario from '../Pages/Usuarios';
+import api from '../../Services/api';
+import { useCookies } from 'react-cookie';
 
 // eslint-disable-next-line import/no-anonymous-default-export
+
 export default ()=>{
-    const [token, setToken] = useState();
-    if(!token){
+    const [token, setToken] = useState()
+    const [cookie, setCookie, removeCookie] = useCookies(['token']);
+    console.log(cookie);
+    useEffect(()=>{
+        if (token){
+            setCookie(token.token);
+        }
+    }, [token]);
+
+    if(cookie){
+        const dados = Buffer.from(`user:${cookie}`, 'utf8').toString('base64');
+        async function getToken(credentials){
+            return await api.get('/validating', {
+                headers: {
+                    Authorization: `Basic ` +credentials //the token is a variable which holds the token
+                }
+            })
+            .then(data => setToken(data.data))
+            .catch((error) => {
+                console.error(error)
+            })
+        };
+        
+        getToken(dados);
+        console.log(token);
+        if(!token){
+            return <Login setToken={setToken}/>    
+        }
+        else{
+
+        }
+    }
+    else if(!token){
         return <Login setToken={setToken}/>
     }
 

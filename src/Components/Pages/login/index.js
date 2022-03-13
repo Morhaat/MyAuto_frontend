@@ -19,7 +19,6 @@ async function realizaLogin(credentials){
 
 
 export default function Login({ setToken }) {
-    localStorage.clear();
     const [user, setUser] = useState('');
     const [pswd, setPswd] = useState('');
     const [msgAlert, setMsgAlert] = useState('');
@@ -27,14 +26,15 @@ export default function Login({ setToken }) {
         e.preventDefault();
         const dados = Buffer.from(`${user}:${pswd}`, 'utf8').toString('base64');
         const token = await realizaLogin(dados);
-        localStorage.setItem("Token", token);
+        console.log(token);
         if(token.value){
             setToken(token);
         }
         else{
 
             setMsgAlert(token.caso);
-
+            setUser('');
+            setPswd('');
             setTimeout(function(){
                 setMsgAlert('');
             }, 5000);
