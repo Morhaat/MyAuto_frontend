@@ -16,34 +16,23 @@ import { useCookies } from 'react-cookie';
 export default ()=>{
     const [token, setToken] = useState()
     const [cookie, setCookie, removeCookie] = useCookies(['token']);
-    console.log(cookie);
-    useEffect(()=>{
-        if (token){
-            setCookie(token.token);
-        }
-    }, [token]);
 
-    if(cookie){
-        const dados = Buffer.from(`user:${cookie}`, 'utf8').toString('base64');
+    if(cookie.token){
+        const dados = Buffer.from(`user:${cookie.token}`, 'utf8').toString('base64');
         async function getToken(credentials){
             return await api.get('/validating', {
                 headers: {
                     Authorization: `Basic ` +credentials //the token is a variable which holds the token
                 }
             })
-            .then(data => setToken(data.data))
+            .then(data => console.log(data))
             .catch((error) => {
                 console.error(error)
             })
         };
-        
-        getToken(dados);
-        console.log(token);
-        if(!token){
-            return <Login setToken={setToken}/>    
-        }
-        else{
 
+        if(!token){
+            return <Login setToken={setToken}/>   
         }
     }
     else if(!token){

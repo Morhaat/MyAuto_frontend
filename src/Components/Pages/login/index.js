@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import PropTypes  from 'prop-types';
 import Div from './styled';
 import api from '../../../Services/api';
+import {useCookies} from 'react-cookie';
 
 
 async function realizaLogin(credentials){
@@ -22,6 +23,7 @@ export default function Login({ setToken }) {
     const [user, setUser] = useState('');
     const [pswd, setPswd] = useState('');
     const [msgAlert, setMsgAlert] = useState('');
+    const [cookie, setCookie, removeCookie] = useCookies(['token']);
     const handleSubmit = async e => {
         e.preventDefault();
         const dados = Buffer.from(`${user}:${pswd}`, 'utf8').toString('base64');
@@ -41,7 +43,10 @@ export default function Login({ setToken }) {
         }
         
     }
-
+    const removeCookies = event => {
+        //removeCookie('');
+        //console.log(cookie);
+    }
     const mudaUser = event => {
         setUser(event.target.value);
     };
@@ -64,6 +69,9 @@ export default function Login({ setToken }) {
                 <input type="submit" name="btLogin" id="btLogin" value=" Login "/>
                 <br/>
                 <label id='alertaLogin'>{msgAlert}</label>
+                <br/>
+                <br/>
+                <input type="button" name="remove" value="Remover" onClick={removeCookies}/>
             </form>
         </Div>
     );
