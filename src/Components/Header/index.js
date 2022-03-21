@@ -19,6 +19,7 @@ const PHeader = ()=>{
                 <li> <Link to='/Veiculos'>Veículos</Link> </li>
                 <li> <Link to='/Contato'>Contato</Link> </li>
                 <li> <Link to='/Sobre'>Sobre</Link> </li>
+                <li> <Link to='/Sair'>Sair</Link> </li>
             </ul>
             <div id='barHide'>
                 <Burger/>   

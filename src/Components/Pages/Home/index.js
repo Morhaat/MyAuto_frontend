@@ -2,10 +2,11 @@ import React from 'react';
 
 import imageCapa from '../../../imgs/capa.jpg';
 
-const PHome = ({cookie})=>{
+const PHome = ({user})=>{
     return(
         <div id='corpo'>
-            <p>{}</p>
+            {console.log(user)}
+            <p>{user}</p>
             <img src= {imageCapa} alt='' id='imgCapa'/>
         </div>
     );
