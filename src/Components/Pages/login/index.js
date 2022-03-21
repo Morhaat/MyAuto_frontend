@@ -19,17 +19,17 @@ async function realizaLogin(credentials){
 }
 
 
-export default function Login({ setToken }) {
+export default function Login() {
     const [user, setUser] = useState('');
     const [pswd, setPswd] = useState('');
     const [msgAlert, setMsgAlert] = useState('');
-    const [cookie, setCookie, removeCookie] = useCookies(['token']);
+    const [token, setToken, removeToken] = useCookies(['token']);
     const handleSubmit = async e => {
         e.preventDefault();
         const dados = Buffer.from(`${user}:${pswd}`, 'utf8').toString('base64');
         const token = await realizaLogin(dados);
         if(token.value){
-            setToken({token});
+            setToken('token',{token});
             window.sessionStorage.clear();
             window.sessionStorage.setItem('token', token.token);
         }
@@ -45,8 +45,8 @@ export default function Login({ setToken }) {
         
     }
     const removeCookies = event => {
-        removeCookie('[object Object]');
-        console.log(cookie);
+        removeToken('[object Object]');
+        console.log(token);
     }
     const mudaUser = event => {
         setUser(event.target.value);
@@ -77,6 +77,6 @@ export default function Login({ setToken }) {
         </Div>
     );
 }
-Login.propTypes = {
+/*Login.propTypes = {
     setToken: PropTypes.func.isRequired
-}
+}*/

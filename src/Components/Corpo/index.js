@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {Switch, Route} from 'react-router-dom';
-
 import Home from '../Pages/Home';
 import Login from '../Pages/login';
 import Veiculos from '../Pages/Veiculos';
@@ -8,58 +7,47 @@ import Contato from '../Pages/Contato';
 import Sobre from '../Pages/Sobre';
 import CadVeiculos from '../Pages/cadAnuncios';
 import Usuario from '../Pages/Usuarios';
-import api from '../../Services/api';
-
+import {useCookies} from 'react-cookie';
+import Utoken from  '../../Services/auth';
 // eslint-disable-next-line import/no-anonymous-default-export
 
 export default ()=>{
-    const [token, setToken] = useState()
+    const [token, setToken, removeToken] = useCookies('[token]');
+    removeToken('[object Object]')
     useEffect(()=>{
         if(sessionStorage.getItem('token')){
-            const dados = Buffer.from(`user:${sessionStorage.getItem('token')}`, 'utf8').toString('base64');
-            async function getToken(credentials){
-                return await api.get('/validating', {
-                    headers: {
-                        Authorization: `Bearer ` +credentials //the token is a variable which holds the token
-                    }
-                })
-                .then(data => setToken(data.data.user))
-
-                .catch((error) => {
-                    setToken();
-                    console.error(error)
-                })
-            };
-            getToken(dados);
         }
     }, []);
-
+    const dados = Buffer.from(`user:${sessionStorage.getItem('token')}`, 'utf8').toString('base64');           
+    
     useEffect(()=>{
-        
+        Utoken(dados, setToken, removeToken);
     },[token]);
     
+    console.log(token)
+
     if(!token){
-        return <Login setToken={setToken}/>   
+        return <Login/>   
     }
     return(
         <Switch>
-            <Route user={token} exact path='/'>
+            <Route exact path='/'>
                 <Home/>
             </Route>
             
-            <Route user={token} exact path='/Veiculos'>
+            <Route exact path='/Veiculos'>
                 <Veiculos/>                
             </Route>
 
-            <Route user={token} exact path='/cadAnuncios'>
+            <Route exact path='/cadAnuncios'>
                 <CadVeiculos/>               
             </Route>
 
-            <Route user={token} exact path='/usuario'>
+            <Route exact path='/usuario'>
                 <Usuario/>
             </Route>
 
-            <Route user={token} exact path='/Contato'>
+            <Route exact path='/Contato'>
                 <Contato/>                
             </Route>
 
