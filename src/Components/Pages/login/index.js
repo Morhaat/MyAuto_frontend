@@ -28,9 +28,10 @@ export default function Login({ setToken }) {
         e.preventDefault();
         const dados = Buffer.from(`${user}:${pswd}`, 'utf8').toString('base64');
         const token = await realizaLogin(dados);
-        console.log(token);
         if(token.value){
-            setToken(token);
+            setToken({token});
+            window.sessionStorage.clear();
+            window.sessionStorage.setItem('token', token.token);
         }
         else{
 
@@ -44,8 +45,8 @@ export default function Login({ setToken }) {
         
     }
     const removeCookies = event => {
-        //removeCookie('');
-        //console.log(cookie);
+        removeCookie('[object Object]');
+        console.log(cookie);
     }
     const mudaUser = event => {
         setUser(event.target.value);

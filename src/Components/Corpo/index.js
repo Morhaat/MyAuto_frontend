@@ -16,48 +16,53 @@ import { useCookies } from 'react-cookie';
 export default ()=>{
     const [token, setToken] = useState()
     const [cookie, setCookie, removeCookie] = useCookies(['token']);
+    useEffect(()=>{
+        if(sessionStorage.getItem('token')){
+            const dados = Buffer.from(`user:${sessionStorage.getItem('token')}`, 'utf8').toString('base64');
+            async function getToken(credentials){
+                return await api.get('/validating', {
+                    headers: {
+                        Authorization: `Bearer ` +credentials //the token is a variable which holds the token
+                    }
+                })
+                .then(data => setCookie('token',data.data.user))
 
-    if(cookie.token){
-        const dados = Buffer.from(`user:${cookie.token}`, 'utf8').toString('base64');
-        async function getToken(credentials){
-            return await api.get('/validating', {
-                headers: {
-                    Authorization: `Basic ` +credentials //the token is a variable which holds the token
-                }
-            })
-            .then(data => console.log(data))
-            .catch((error) => {
-                console.error(error)
-            })
-        };
-
-        if(!token){
-            return <Login setToken={setToken}/>   
+                .catch((error) => {
+                    removeCookie('token');
+                    console.error(error)
+                })
+            };
+            getToken(dados);
         }
-    }
-    else if(!token){
-        return <Login setToken={setToken}/>
-    }
+    }, []);
 
+    useEffect(()=>{
+        console.log(cookie);
+    },[cookie]);
+
+    if(!cookie.token){
+        console.log('Agora aqui');
+        return <Login setToken={setToken}/>   
+    }
     return(
         <Switch>
-            <Route exact path='/'>
+            <Route user={cookie} exact path='/'>
                 <Home/>
             </Route>
             
-            <Route exact path='/Veiculos'>
+            <Route user={cookie} exact path='/Veiculos'>
                 <Veiculos/>                
             </Route>
 
-            <Route exact path='/cadAnuncios'>
+            <Route user={cookie} exact path='/cadAnuncios'>
                 <CadVeiculos/>               
             </Route>
 
-            <Route exact path='/usuario'>
+            <Route user={cookie} exact path='/usuario'>
                 <Usuario/>
             </Route>
 
-            <Route exact path='/Contato'>
+            <Route user={cookie} exact path='/Contato'>
                 <Contato/>                
             </Route>
 
