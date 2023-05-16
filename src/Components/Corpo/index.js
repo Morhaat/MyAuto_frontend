@@ -9,6 +9,7 @@ import CadVeiculos from '../Pages/cadAnuncios';
 import Usuario from '../Pages/Usuarios';
 import {useCookies} from 'react-cookie';
 import Utoken from  '../../Services/auth';
+import imageCapa from '../../imgs/logoMyCar404.png';
 // eslint-disable-next-line import/no-anonymous-default-export
 
 export default ()=>{
@@ -26,7 +27,7 @@ export default ()=>{
     
     console.log(token)
 
-    if(!token){
+    if(token != null){
         return <Login/>   
     }
     return(
@@ -59,7 +60,7 @@ export default ()=>{
                 {setToken}                
             </Route>
 
-            <Route path="*" component={() => <h1>Página não encontrada!</h1>} />
+            <Route path="*" component={() => <div id='corpoInexistente'><img src= {imageCapa} alt='' id='Logo404'/></div>} />
             
         </Switch>
     );

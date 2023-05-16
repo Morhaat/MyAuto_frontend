@@ -89,6 +89,15 @@
     overflow: hidden;
 }
 
+#corpoInexistente{
+    width: 20%;
+    margin: 100px auto;
+}
+
+#corpoInexistente #logo404{
+    width: 100%;
+}
+
 #rightBarOn {
     position: absolute;
     right: 0px;

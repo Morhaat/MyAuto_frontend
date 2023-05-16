@@ -58,7 +58,7 @@ export default function Login() {
 
     return(
         <Div>
-            <form id='formLogin' onSubmit={handleSubmit}>
+            {/* <form id='formLogin' onSubmit={handleSubmit}>
                 <label htmlFor='username'>Usuário</label>
                 <br/>
                 <input type= "text" name='username' id='username' value={user} onChange={mudaUser}/>
@@ -73,7 +73,8 @@ export default function Login() {
                 <br/>
                 <br/>
                 <input type="button" name="remove" value="Remover" onClick={removeCookies}/>
-            </form>
+            </form> */}
+
         </Div>
     );
 }
