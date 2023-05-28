@@ -7,62 +7,61 @@ import Contato from '../Pages/Contato';
 import Sobre from '../Pages/Sobre';
 import CadVeiculos from '../Pages/cadAnuncios';
 import Usuario from '../Pages/Usuarios';
+import { isEmpty } from 'lodash';
 import {useCookies} from 'react-cookie';
 import Utoken from  '../../Services/auth';
 import imageCapa from '../../imgs/logoMyCar404.png';
 // eslint-disable-next-line import/no-anonymous-default-export
 
-export default ()=>{
-    const [token, setToken, removeToken] = useCookies('[token]');
-    removeToken('[object Object]')
-    useEffect(()=>{
-        if(sessionStorage.getItem('token')){
-        }
-    }, []);
-    const dados = Buffer.from(`user:${sessionStorage.getItem('token')}`, 'utf8').toString('base64');           
-    
-    useEffect(()=>{
-        Utoken(dados, setToken, removeToken);
-    },[token]);
-    
+async function ValidaUser(token, setToken, removeToken){
+    const dados = sessionStorage.getItem('token');
+    Utoken(dados, setToken, removeToken);
+
     console.log(token)
-
-    if(token != null){
-        return <Login/>   
+    console.log(dados)
+    if(!isEmpty(token)){
+        return true  
     }
-    return(
-        <Switch>
-            <Route exact path='/'>
-                <Home/>
-            </Route>
-            
-            <Route exact path='/Veiculos'>
-                <Veiculos/>                
-            </Route>
-
-            <Route exact path='/cadAnuncios'>
-                <CadVeiculos/>               
-            </Route>
-
-            <Route exact path='/usuario'>
-                <Usuario/>
-            </Route>
-
-            <Route exact path='/Contato'>
-                <Contato/>                
-            </Route>
-
-            <Route exact path='/Sobre'>
-                <Sobre/>                
-            </Route>
-
-            <Route exact path='/Sair'>
-                {setToken}                
-            </Route>
-
-            <Route path="*" component={() => <div id='corpoInexistente'><img src= {imageCapa} alt='' id='Logo404'/></div>} />
-            
-        </Switch>
-    );
-
+    else{
+        return false
+    }
 }
+
+
+export default ()=>{
+    const [token, setToken, removeToken] = useCookies(['token']);
+        return(
+            <Switch>
+                <Route exact path='/'>
+                    {ValidaUser(token, setToken, removeToken) ? <Home/> : <Login/> }
+                </Route>
+                
+                <Route exact path='/Veiculos'>
+                    <Veiculos/>                
+                </Route>
+    
+                <Route exact path='/cadAnuncios'>
+                    <CadVeiculos/>               
+                </Route>
+    
+                <Route exact path='/usuario'>
+                    <Usuario/>
+                </Route>
+    
+                <Route exact path='/Contato'>
+                    <Contato/>                
+                </Route>
+    
+                <Route exact path='/Sobre'>
+                    <Sobre/>                
+                </Route>
+    
+                <Route exact path='/Sair'>
+                    {setToken}                
+                </Route>
+    
+                <Route path="*" component={() => <div id='corpoInexistente'><img src= {imageCapa} alt='' id='Logo404'/></div>} />
+                
+            </Switch>
+        );
+    }
