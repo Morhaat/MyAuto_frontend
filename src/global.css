@@ -27,3 +27,10 @@ a:hover{
 .aLink{
     color: rgba(121, 121, 121, 0.377);
 }
+
+
+#imgCapa{
+    width: 100%;
+    margin-top: 30px;
+    overflow: hidden;
+}

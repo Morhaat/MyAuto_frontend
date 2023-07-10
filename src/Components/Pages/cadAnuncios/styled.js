@@ -1,6 +1,11 @@
     import styled from 'styled-components';
 
 const Div = styled.div`
+
+    .maxWidthSelect{
+        max-width: 270px;
+    }
+
     #divForm{
         color: #FFFFFF;
         margin: 20px;

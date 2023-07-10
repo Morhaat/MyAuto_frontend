@@ -13,27 +13,12 @@ import Utoken from  '../../Services/auth';
 import imageCapa from '../../imgs/logoMyCar404.png';
 // eslint-disable-next-line import/no-anonymous-default-export
 
-async function ValidaUser(token, setToken, removeToken){
-    const dados = sessionStorage.getItem('token');
-    Utoken(dados, setToken, removeToken);
-
-    console.log(token)
-    console.log(dados)
-    if(!isEmpty(token)){
-        return true  
-    }
-    else{
-        return false
-    }
-}
-
-
 export default ()=>{
     const [token, setToken, removeToken] = useCookies(['token']);
         return(
             <Switch>
                 <Route exact path='/'>
-                    {ValidaUser(token, setToken, removeToken) ? <Home/> : <Login/> }
+                    <Home/>
                 </Route>
                 
                 <Route exact path='/Veiculos'>
@@ -57,7 +42,7 @@ export default ()=>{
                 </Route>
     
                 <Route exact path='/Sair'>
-                    {setToken}                
+                    {removeToken}                
                 </Route>
     
                 <Route path="*" component={() => <div id='corpoInexistente'><img src= {imageCapa} alt='' id='Logo404'/></div>} />

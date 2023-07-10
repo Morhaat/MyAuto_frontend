@@ -1,4 +1,8 @@
 import React, {useState, useEffect} from 'react';
+import Login from '../login';
+import { isEmpty } from 'lodash';
+import Utoken from  '../../../Services/auth';
+import {useCookies} from 'react-cookie';
 import CurrencyInput from 'react-currency-masked-input';
 import axios from 'axios';
 import Div from './styled';
@@ -6,9 +10,20 @@ import api from '../../../Services/api';
 import Img from './PageComponents/Img';
 import FrameLoad from './PageComponents/FrameLoad';
 import {Link} from 'react-router-dom';
+import useWindowDimension from 'use-window-dimensions';
 
 
 const CadVeiculos = ()=>{  
+
+    // Valida login..........................................................................
+    const [token, setToken, removeToken] = useCookies(['token']);
+    useEffect(()=>{
+        const dados = sessionStorage.getItem('token');
+        Utoken(dados, setToken, removeToken);
+        console.log(token);
+    }, []);
+
+
 
     const [maxSize, setMaxSize] = useState(10485760);
     //Estados dos Selects...............................................................................................
@@ -74,7 +89,8 @@ const CadVeiculos = ()=>{
     }
 
     const [listVeiculos, setListVeiculos] = useState([]);
-    const [filtro, setFiltro] = useState({});
+    const [filtro, setFiltro] = useState({id_usuario : `${token && token.token && token.token._id ? token.token._id : ""}`});
+    
     const [existeData, setexisteData] = useState(false);
 
     const convertBase64 = (file) => {
@@ -206,7 +222,7 @@ const CadVeiculos = ()=>{
     }, [optMarca]);
 
     useEffect(() => {
-        if(!optMarca.link==''){
+        if(optMarca.link!==''){
             async function loadModelos(){
                 const response = await axios.get(optMarca.link);
                 setModelo(response.data.modelos);
@@ -216,7 +232,7 @@ const CadVeiculos = ()=>{
     }, [optMarca]);
 
     useEffect(() => {
-        if(!optModelo.link==''){
+        if(optModelo.link!==''){
             async function loadAnoModelo(){
                 const response = await axios.get(optModelo.link);
                 setAnoModelo(response.data);
@@ -226,7 +242,7 @@ const CadVeiculos = ()=>{
     }, [optModelo]);
 
     useEffect(() => {
-        if(!optAno.link==''){
+        if(optAno.link!==''){
             async function loadAnoModelo(){
                 const response = await axios.get(optAno.link);
                 setDadosFipe(response.data);
@@ -236,37 +252,40 @@ const CadVeiculos = ()=>{
     }, [optAno]);
 
     useEffect(()=>{
-        async function loadAnuncios(){
-            await api.get('/anuncios', {filtro})
-            .then((response) => {
-                console.log(response.data.resultFiltro);
-                if (response.data.resultFiltro.length === 0){
-                    setexisteData(false);
-                    setListVeiculos([{error:'Não existem registros com estes dados!'}]);    
-                }
-                else{
-                    setexisteData(true);
-                    setListVeiculos(response.data.resultFiltro); 
-                    console.log(response.data.resultFiltro); 
-                }
-            })
-            .catch((error)=> {
-                if (error.response){
-                    setexisteData(false);
-                    setListVeiculos([{error:' *Sem resposta* - '+error.response.data}]); 
-                }
-                else if (error.request){
-                    setexisteData(false);
-                    setListVeiculos([{error:'Houve uma falha durante a requisição! - '+error.request+' - '+error.message}]); 
-                }
-            }) 
+        if (filtro !== ""){
+            async function loadAnuncios(){
+                console.log(filtro);
+                await api.post('/Anuncios', {filtro})
+                .then((response) => {
+                    console.log(response.data.resultFiltro);
+                    if (response.data.resultFiltro.length === 0){
+                        setexisteData(false);
+                        setListVeiculos([{error:'Não existem registros com estes dados!'}]);    
+                    }
+                    else{
+                        setexisteData(true);
+                        setListVeiculos(response.data.resultFiltro); 
+                        console.log(response.data.resultFiltro); 
+                    }
+                })
+                .catch((error)=> {
+                    if (error.response){
+                        setexisteData(false);
+                        setListVeiculos([{error:' *Sem resposta* - '+error.response.data}]); 
+                    }
+                    else if (error.request){
+                        setexisteData(false);
+                        setListVeiculos([{error:'Houve uma falha durante a requisição! - '+error.request+' - '+error.message}]); 
+                    }
+                }) 
+            }
+    
+            loadAnuncios();
         }
-
-        loadAnuncios();
     } ,[filtro]);
 
 
-    async function handleChange(tipo, objeto){
+    async function handleChangeCadAnuncio(tipo, objeto){
         if(tipo === 'marca'){
             try{
                 setOptMarca(
@@ -321,8 +340,8 @@ const CadVeiculos = ()=>{
         else{
             console.log('Gerando dados para inserção no banco........');
             const geraDados = {
-                id_usuario:'idUsuario',
-                usuario: 'usuario',
+                id_usuario: token.token._id,
+                usuario: token.token.usuario,
                 ativo:true,
                 data_anuncio: Date.now(),
                 titulo:titulo,
@@ -365,9 +384,11 @@ const CadVeiculos = ()=>{
         return formatado;
     }
 
-    return(
-        <Div>
-            <div id="divForm">
+
+    if(!isEmpty(token)){    
+        return(
+            <Div>
+            <div id="divForm" className='row'>
             <FrameLoad loading={statusLoad} messageStatus={messageStatus}/>
             <form id='bordaSelect' onSubmit={e=> handleSubmit(e)}>
                 <h4>Cadastrar um anúncio</h4>
@@ -387,7 +408,7 @@ const CadVeiculos = ()=>{
                 <div id='divMarca'>
                     <label>Marca</label>
                     <br/>
-                    <select id='selecaoMarcas' onChange= {(e) => handleChange('marca', e.target)
+                    <select id='selecaoMarcas' onChange= {(e) => handleChangeCadAnuncio('marca', e.target)
                         }>
                         <option key='00' value=''> Selecione uma marca </option>
                         {selecaoMarca.map(selecaoMarca => (
@@ -399,7 +420,7 @@ const CadVeiculos = ()=>{
                 <div id='divModelo'>
                     <label>Modelo</label>
                     <br/>
-                    <select id='selecaoModelos' onChange= {(e) => handleChange('modelo',e.target)} >
+                    <select id='selecaoModelos' onChange= {(e) => handleChangeCadAnuncio('modelo',e.target)} className='maxWidthSelect'>
                         <option key='00' value=''> Selecione um modelo </option>
                         {selecaoModelo.map(selecaoModelo => (
                         <option key={selecaoModelo.codigo} value={selecaoModelo.codigo}>{selecaoModelo.nome}</option>
@@ -410,7 +431,7 @@ const CadVeiculos = ()=>{
                 <div id='divAno'>
                     <label>Ano</label>
                     <br/>
-                    <select id='selecaoAnos' onChange= {(e) => handleChange('anos', e.target)}>
+                    <select id='selecaoAnos' onChange= {(e) => handleChangeCadAnuncio('anos', e.target)}>
                         <option key='00' value=''> Selecione um ano </option>
                         {selecaoAno.map(selecaoAno => (
                         <option key={selecaoAno.codigo} value={selecaoAno.codigo}>{selecaoAno.nome}</option>
@@ -461,31 +482,31 @@ const CadVeiculos = ()=>{
                     Restantes: {maxSize}kb
                     <br/>
                     <Img file={foto1} setaImg={setFoto1}>
-                        <div>
+                        <div className="col-12">
                             <input type="file" value={e=> e.target.value = foto1} onChange={e=> loadImages(1, e)} /> 
                         </div>
                     </Img>
 
                     <Img file={foto2} setaImg={setFoto2}>
-                        <div>
+                        <div className="col-12">
                             <input type="file" value={e=> e.target.value = foto2} onChange={e=> loadImages(2, e)} /> 
                         </div>
                     </Img>
 
                     <Img file={foto3} setaImg={setFoto3}>
-                        <div>
+                        <div className="col-12">
                             <input type="file" value={e=> e.target.value = foto3} onChange={e=> loadImages(3, e)} /> 
                         </div>
                     </Img>
 
                     <Img file={foto4} setaImg={setFoto4}>
-                        <div>
+                        <div className="col-12">
                             <input type="file" value={e=> e.target.value = foto4} onChange={e=> loadImages(4, e)} /> 
                         </div>
                     </Img>
 
                     <Img file={foto5} setaImg={setFoto5}>
-                        <div>
+                        <div className="col-12">
                             <input type="file" value={e=> e.target.value = foto5} onChange={e=> loadImages(5, e)} /> 
                         </div>
                     </Img>
@@ -501,11 +522,38 @@ const CadVeiculos = ()=>{
             <div id="divSection">
                 {   existeData
                     ? listVeiculos.map(evento => (
-                        <section key = {evento._id} id="sessoes">
+
+                        <div className="card bg-dark">
+                        <h4 id="titulo" className='text-light'>{evento.titulo}</h4>
+                        <img className="" src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados && evento.fotos.foto1.dados.name ? evento.fotos.foto1.dados.name : ""}/>
+                        <div className="card-body bg-dark">
+                            <p className="card-text text-light">{evento.veiculo.descricao}</p>
+                        </div>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item bg-dark">
+                                <h4 className='text-light'>Dados do veículo:</h4>
+                            </li>
+                            <li className="list-group-item bg-dark text-light">
+                                Marca: {evento.veiculo.marca.caption}<br/>
+                                Modelo: {evento.veiculo.modelo.caption}<br/>
+                                Ano: {evento.veiculo.ano_modelo.caption}<br/>
+                                Cor: {evento.veiculo.cor}<br/>
+                                Combustível: {evento.veiculo.combustivel}<br/>
+                            </li>
+                            <li className="list-group-item bg-dark text-light">
+                                <h5>{numberParaReal(evento.veiculo.preco_venda ? evento.veiculo.preco_venda : 0)}</h5>
+                            </li>
+                        </ul>
+                        <div className="card-body">
+                            <Link className="text-light bg-dark" to = {"/"+evento.id_usuario} >Anunciante: {evento.usuario}</Link>
+                        </div>
+                        </div>
+
+                        /* <section key = {evento._id} id="sessoes">
                                 <div>
                                     <h4 id="titulo"><a href="#">{evento.titulo}</a></h4>
                                     <div id="esquerda">
-                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados.name} />
+                                        <img src = {evento.fotos.foto1.file} alt = {evento.fotos.foto1.dados && evento.fotos.foto1.dados.name ? evento.fotos.foto1.dados.name : ""} />
                                         <p>{evento.veiculo.descricao}</p>
                                     </div>
                                     <div id="direita">
@@ -516,22 +564,27 @@ const CadVeiculos = ()=>{
                                         Ano: {evento.veiculo.ano_modelo.caption}<br/>
                                         Cor: {evento.veiculo.cor}<br/>
                                         Combustível: {evento.veiculo.combustivel}<br/>
-                                        <h5>{numberParaReal(evento.veiculo.preco_venda)}</h5>
+                                        <h5>{numberParaReal(evento.veiculo.preco_venda ? evento.veiculo.preco_venda : 0)}</h5>
                                         <br/>
-                                        <Link to = {"/usuario:"+evento.id_usuario} >Vendedor: {evento.usuario}</Link>
+                                        <Link to = {"/"+evento.id_usuario} >Anunciante: {evento.usuario}</Link>
                                     </div>
                                 </div>
                             <div>
                                 <hr/>
                             </div>
-                        </section>
+                        </section> */
                     ))
                     : listVeiculos.map(evento => (<p key= {evento.error}>{evento.error}</p>))
                 }
                 
             </div>
-        </Div>
-    );
+            </Div>
+        );
+        
+    }
+    else{
+        return(<Login/>);
+    }
 }
 
 export default CadVeiculos;

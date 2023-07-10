@@ -70,7 +70,7 @@ export default function Login() {
     return(
         <Div>
             <div className="row"> 
-                <form id='formLogin' className="col-lg-4 m-auto" onSubmit={handleSubmit}>
+                <form id='formLogin' className="col-10 col-lg-4 m-auto" onSubmit={handleSubmit}>
                 <div class="form-group">
                     <label htmlFor="exampleInputEmail1">Usuário</label>
                     <input type="username" className="form-control col-4" aria-describedby="emailHelp" placeholder="Entre com o usuário" name='username' id='username' value={user} onChange={mudaUser}/>
